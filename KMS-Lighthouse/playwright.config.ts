@@ -27,16 +27,22 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // A new project just for running tests tagged with @e2e
+    {
+      name: "e2e",
+      grep: /@e2e/,
+    },
+
+    // --- Original browser projects ---
+    // These will run ALL tests on a specific browser
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
     },
-
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
