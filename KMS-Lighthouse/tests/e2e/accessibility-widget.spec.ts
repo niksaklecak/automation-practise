@@ -15,7 +15,11 @@ test.describe("Accessibility Widget", () => {
   });
 
   test.fixme("should open and close the accessibility widget", async () => {});
-  test.fixme("toggles should work correctly", async () => {});
+  test.fixme("toggles should work correctly", async ({ accessibilityWidget }) => {
+    // TODO: Implement this test
+    await accessibilityWidget.keyboardNavigationToggle.click();
+    //expect to use the keyboard - check the
+  });
 
   test.afterEach(async ({ page }) => {
     await page.close();
