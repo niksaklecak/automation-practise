@@ -6,6 +6,7 @@ jobs:
   test:
     environment: kmslh
     env:
+      NODE_ENV: ci
       BASE_URL: ${{ vars.BASE_URL }}
     timeout-minutes: 60
     runs-on: ubuntu-latest

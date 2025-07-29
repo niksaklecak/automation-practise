@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import path from "path";
 
-// Correctly locate the .env file from the project root
-const envFilePath = path.resolve(__dirname, "..", ".env");
-
-dotenv.config({ path: envFilePath });
+if (process.env.NODE_ENV !== "ci") {
+  const envFilePath = path.resolve(__dirname, "..", ".env");
+  dotenv.config({ path: envFilePath });
+}
 
 /**
  * Retrieves an environment variable strictly.
