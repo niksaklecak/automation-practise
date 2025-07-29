@@ -1,4 +1,4 @@
-import { test as base } from "@playwright/test";
+import { test as base, expect } from "@playwright/test";
 import { MainPage } from "../../pages/main-page";
 import { BookDemoPage } from "../../pages/book-demo-page";
 import { AccessibilityWidget } from "../../pages/accessibility-widget";
@@ -18,12 +18,16 @@ export const test = base.extend<MyFixtures>({
 
   bookDemoPage: async ({ mainPage, page }, use) => {
     await mainPage.bookADemoLink.click();
+    await page.waitForURL("**/book-a-demo/");
     await use(new BookDemoPage(page));
   },
 
   accessibilityWidget: async ({ mainPage, page }, use) => {
+    const accessibilityWidget = new AccessibilityWidget(page);
     await mainPage.accessibilityWidgetLink.click();
-    await use(new AccessibilityWidget(page));
+    // This explicit wait ensures the widget is visible before the test starts.
+    await expect(accessibilityWidget.accessibilityToolbar).toBeVisible();
+    await use(accessibilityWidget);
   },
 });
 
