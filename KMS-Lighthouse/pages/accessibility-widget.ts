@@ -1,8 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base-page";
 
-export class AccessibilityWidgetPage extends BasePage {
+export class AccessibilityWidget extends BasePage {
   readonly accessibilityToolbar: Locator;
+  readonly closeToolbarButton: Locator;
   readonly keyboardNavigationToggle: Locator;
   readonly disableAnimationsToggle: Locator;
   readonly contrastToggle: Locator;
@@ -14,20 +15,19 @@ export class AccessibilityWidgetPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.accessibilityToolbar = page.locator("#acc-toolbar");
-    this.keyboardNavigationToggle = page.getByRole("button", {
-      name: "Keyboard Navigation",
+    this.accessibilityToolbar = page.getByText("Accessibility Toolbar", {
+      exact: true,
     });
-    this.disableAnimationsToggle = page.getByRole("button", {
-      name: "Disable Animations",
+    this.closeToolbarButton = page.getByRole("button", {
+      name: "Toggle the visibility of the",
     });
-    this.contrastToggle = page.getByRole("button", { name: "Contrast" });
-    this.increaseTextButton = page.getByRole("button", { name: "Increase Text" });
-    this.decreaseTextButton = page.getByRole("button", { name: "Decrease Text" });
-    this.readableFontToggle = page.getByRole("button", { name: "Readable Font" });
-    this.markTitlesToggle = page.getByRole("button", { name: "Mark Titles" });
-    this.highlightLinksAndButtonsToggle = page.getByRole("button", {
-      name: "Highlight Links & Buttons",
-    });
+    this.keyboardNavigationToggle = page.getByText("keyboard Keyboard Navigation");
+    this.disableAnimationsToggle = page.getByText("visibility_off Disable");
+    this.contrastToggle = page.getByText("nights_stay Contrast");
+    this.increaseTextButton = page.getByText("format_size Increase Text");
+    this.decreaseTextButton = page.getByText("text_fields Decrease Text");
+    this.readableFontToggle = page.getByText("font_download Readable Font");
+    this.markTitlesToggle = page.getByText("title Mark Titles");
+    this.highlightLinksAndButtonsToggle = page.getByText("link Highlight Links & Buttons");
   }
 }

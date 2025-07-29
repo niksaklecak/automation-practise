@@ -1,12 +1,12 @@
 import { test as base } from "@playwright/test";
 import { MainPage } from "../../pages/main-page";
 import { BookDemoPage } from "../../pages/book-demo-page";
-import { AccessibilityWidgetPage } from "../../pages/accessibility-widget";
+import { AccessibilityWidget } from "../../pages/accessibility-widget";
 
 type MyFixtures = {
   mainPage: MainPage;
   bookDemoPage: BookDemoPage;
-  accessibilityWidgetPage: AccessibilityWidgetPage;
+  accessibilityWidget: AccessibilityWidget;
 };
 
 export const test = base.extend<MyFixtures>({
@@ -14,16 +14,16 @@ export const test = base.extend<MyFixtures>({
     const mainPage = new MainPage(page);
     await mainPage.open();
     await use(mainPage);
-
-    await page.close();
   },
 
-  bookDemoPage: async ({ page }, use) => {
+  bookDemoPage: async ({ mainPage, page }, use) => {
+    await mainPage.bookADemoLink.click();
     await use(new BookDemoPage(page));
   },
 
-  accessibilityWidgetPage: async ({ page }, use) => {
-    await use(new AccessibilityWidgetPage(page));
+  accessibilityWidget: async ({ mainPage, page }, use) => {
+    await mainPage.accessibilityWidgetLink.click();
+    await use(new AccessibilityWidget(page));
   },
 });
 
