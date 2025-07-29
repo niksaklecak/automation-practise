@@ -18,7 +18,7 @@ jobs:
         run: npm install
         working-directory: ./KMS-Lighthouse
       - name: Install Playwright Browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
         working-directory: ./KMS-Lighthouse
       - name: Run Playwright tests
         run: npx playwright test
