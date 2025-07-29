@@ -1,0 +1,1 @@
+# KMS-Lighthouse-automation-task
