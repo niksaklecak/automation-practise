@@ -13,12 +13,13 @@ export const test = base.extend<MyFixtures>({
   mainPage: async ({ page }, use) => {
     const mainPage = new MainPage(page);
     await mainPage.open();
+    await expect(mainPage.bookADemoLink).toBeVisible({ timeout: 5000 });
     await use(mainPage);
   },
 
   bookDemoPage: async ({ mainPage, page }, use) => {
     await mainPage.bookADemoLink.click();
-    await page.waitForURL("**/book-a-demo/");
+    await page.waitForURL("**/book-a-demo/", { timeout: 5000 });
     await use(new BookDemoPage(page));
   },
 
