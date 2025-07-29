@@ -4,6 +4,9 @@ on:
     branches: [main]
 jobs:
   test:
+    environment: kmslh
+    env:
+      BASE_URL: ${{ vars.BASE_URL }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:

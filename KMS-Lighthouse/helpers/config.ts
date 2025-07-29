@@ -1,12 +1,8 @@
 import dotenv from "dotenv";
 import path from "path";
-import fs from "fs";
 
 // Correctly locate the .env file from the project root
 const envFilePath = path.resolve(__dirname, "..", ".env");
-if (!fs.existsSync(envFilePath)) {
-  throw new Error(`FATAL ERROR: .env file not found at ${envFilePath}. Please create one.`);
-}
 
 dotenv.config({ path: envFilePath });
 
