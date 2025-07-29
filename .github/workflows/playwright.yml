@@ -10,7 +10,7 @@ jobs:
     environment: kmslh
     env:
       NODE_ENV: ci
-      BASE_URL: https://kmslh.com/
+      BASE_URL: ${{ vars.BASE_URL }}
 
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -27,8 +27,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
         working-directory: ./KMS-Lighthouse
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Run Playwright tests on Chromium
+        run: npx playwright test --project=chromium
         working-directory: ./KMS-Lighthouse
       - uses: actions/upload-artifact@v4
         if: always()

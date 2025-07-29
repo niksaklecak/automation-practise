@@ -14,9 +14,9 @@ export class MainPage extends BasePage {
   async open() {
     await this.page.goto("/");
     // Gracefully handle a potential cookie consent banner
-    const acceptCookiesButton = this.page.getByRole("button", { name: "Ok" });
-    await acceptCookiesButton.click({ timeout: 3000 }).catch(() => {
-      console.log("Cookie banner not found or already accepted.");
-    });
+    // const acceptCookiesButton = this.page.getByRole("button", { name: "Ok" });
+    // await acceptCookiesButton.click({ timeout: 3000 }).catch(() => {
+    //   console.log("Cookie banner not found or already accepted.");
+    // });
   }
 }
