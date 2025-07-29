@@ -28,4 +28,7 @@ function getEnv(key: string): string {
   return value;
 }
 
-export const config = {};
+export const config = {
+  baseUrl: getEnv("BASE_URL"),
+  baseApiUrl: getEnv("BASE_API_URL"),
+};
