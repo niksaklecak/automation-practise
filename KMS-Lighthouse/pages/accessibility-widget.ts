@@ -2,7 +2,7 @@ import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base-page";
 
 export class AccessibilityWidget extends BasePage {
-  readonly accessibilityToolbar: Locator;
+  readonly accessibilityToolbarLabel: Locator;
   readonly closeToolbarButton: Locator;
   readonly keyboardNavigationToggle: Locator;
   readonly disableAnimationsToggle: Locator;
@@ -15,12 +15,8 @@ export class AccessibilityWidget extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.accessibilityToolbar = page.getByText("Accessibility Toolbar", {
-      exact: true,
-    });
-    this.closeToolbarButton = page.getByRole("button", {
-      name: "Toggle the visibility of the",
-    });
+    this.accessibilityToolbarLabel = page.getByText("Accessibility Toolbar", { exact: true });
+    this.closeToolbarButton = page.getByRole("button", { name: "Toggle the visibility of the" });
     this.keyboardNavigationToggle = page.getByText("keyboard Keyboard Navigation");
     this.disableAnimationsToggle = page.getByText("visibility_off Disable");
     this.contrastToggle = page.getByText("nights_stay Contrast");

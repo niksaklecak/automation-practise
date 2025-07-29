@@ -26,7 +26,7 @@ export const test = base.extend<MyFixtures>({
   accessibilityWidget: async ({ mainPage, page }, use) => {
     const accessibilityWidget = new AccessibilityWidget(page);
     await mainPage.accessibilityWidgetLink.click();
-    await expect(accessibilityWidget.accessibilityToolbar).toBeVisible();
+    await expect(accessibilityWidget.accessibilityToolbarLabel).toBeVisible();
     await use(accessibilityWidget);
   },
 });

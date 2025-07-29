@@ -2,7 +2,7 @@ import { test, expect } from "../fixtures/base";
 
 test.describe("Accessibility Widget", () => {
   test("all tools are visible", async ({ accessibilityWidget }) => {
-    await expect(accessibilityWidget.accessibilityToolbar).toBeVisible();
+    await expect(accessibilityWidget.accessibilityToolbarLabel).toBeVisible();
     await expect(accessibilityWidget.closeToolbarButton).toBeVisible();
     await expect(accessibilityWidget.keyboardNavigationToggle).toBeVisible();
     await expect(accessibilityWidget.disableAnimationsToggle).toBeVisible();
@@ -22,8 +22,11 @@ test.describe("Accessibility Widget", () => {
 });
 
 test.describe("Accessibility Widget - toggles should work correctly", () => {
-  test.skip("keyboard navigation toggle should work correctly", async ({ accessibilityWidget }) => {
+  test("keyboard navigation toggle should work correctly", async ({ accessibilityWidget }) => {
     await accessibilityWidget.keyboardNavigationToggle.click();
+    await expect(accessibilityWidget.keyboardNavigationToggle).toBeFocused();
+    await accessibilityWidget.page.keyboard.press("Tab");
+    await expect(accessibilityWidget.disableAnimationsToggle).toBeFocused();
   });
 
   test.skip("disable animations toggle should work correctly", async ({ accessibilityWidget }) => {
