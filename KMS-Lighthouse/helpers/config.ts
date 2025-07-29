@@ -2,11 +2,10 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 
-const envFilePath = path.resolve(process.cwd(), ".env");
+// Correctly locate the .env file from the project root
+const envFilePath = path.resolve(__dirname, "..", ".env");
 if (!fs.existsSync(envFilePath)) {
-  throw new Error(
-    `FATAL ERROR: .env file not found at ${envFilePath}. Please create one.`
-  );
+  throw new Error(`FATAL ERROR: .env file not found at ${envFilePath}. Please create one.`);
 }
 
 dotenv.config({ path: envFilePath });
@@ -21,14 +20,11 @@ function getEnv(key: string): string {
   const value = process.env[key];
 
   if (value === undefined) {
-    throw new Error(
-      `Environment variable '${key}' is not set in the .env file.`
-    );
+    throw new Error(`Environment variable '${key}' is not set in the .env file.`);
   }
   return value;
 }
 
 export const config = {
   baseUrl: getEnv("BASE_URL"),
-  baseApiUrl: getEnv("BASE_API_URL"),
 };
