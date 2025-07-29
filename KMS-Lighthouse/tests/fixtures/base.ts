@@ -19,14 +19,13 @@ export const test = base.extend<MyFixtures>({
 
   bookDemoPage: async ({ mainPage, page }, use) => {
     await mainPage.bookADemoLink.click();
-    // await page.waitForURL("**/book-a-demo/", { timeout: 5000 });
+    await page.waitForURL("**/book-a-demo/", { timeout: 10000 });
     await use(new BookDemoPage(page));
   },
 
   accessibilityWidget: async ({ mainPage, page }, use) => {
     const accessibilityWidget = new AccessibilityWidget(page);
     await mainPage.accessibilityWidgetLink.click();
-    // This explicit wait ensures the widget is visible before the test starts.
     await expect(accessibilityWidget.accessibilityToolbar).toBeVisible();
     await use(accessibilityWidget);
   },

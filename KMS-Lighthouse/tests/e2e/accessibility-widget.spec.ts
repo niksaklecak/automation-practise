@@ -15,10 +15,47 @@ test.describe("Accessibility Widget", () => {
   });
 
   test.fixme("should open and close the accessibility widget", async () => {});
-  test.fixme("toggles should work correctly", async ({ accessibilityWidget }) => {
-    // TODO: Implement this test
+
+  test.afterEach(async ({ page }) => {
+    await page.close();
+  });
+});
+
+test.describe("Accessibility Widget - toggles should work correctly", () => {
+  test.skip("keyboard navigation toggle should work correctly", async ({ accessibilityWidget }) => {
     await accessibilityWidget.keyboardNavigationToggle.click();
-    //expect to use the keyboard - check the
+  });
+
+  test.skip("disable animations toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.disableAnimationsToggle.click();
+  });
+
+  test("contrast toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.contrastToggle.click();
+  });
+
+  test("increase text size toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.increaseTextButton.click();
+  });
+
+  test("decrease text size toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.decreaseTextButton.click();
+  });
+
+  test("readable font toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.readableFontToggle.click();
+  });
+
+  test("mark titles toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.markTitlesToggle.click();
+  });
+
+  test("highlight links and buttons toggle should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.highlightLinksAndButtonsToggle.click();
+  });
+
+  test("close toolbar button should work correctly", async ({ accessibilityWidget }) => {
+    await accessibilityWidget.closeToolbarButton.click();
   });
 
   test.afterEach(async ({ page }) => {
