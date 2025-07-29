@@ -1,4 +1,4 @@
-import { test, expect } from "../../tests/fixtures/base";
+import { test, expect } from "../fixtures/base";
 
 test.describe("Book a Demo", () => {
   test("Verify navigation link works", async ({ bookDemoPage, page }) => {

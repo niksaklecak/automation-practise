@@ -1,4 +1,4 @@
-import { test, expect } from "../../tests/fixtures/base";
+import { test, expect } from "../fixtures/base";
 
 test.describe("Accessibility Widget", () => {
   test("all tools are visible", async ({ accessibilityWidget }) => {
