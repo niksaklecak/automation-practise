@@ -1,5 +1,6 @@
 import { test, expect } from "../fixtures/base";
 import { Locator } from "@playwright/test";
+import { BookDemoPage } from "../../pages/book-demo-page";
 
 test.describe("Book a Demo", () => {
   test("Verify navigation link works", async ({ mainPage, bookDemoPage }) => {
@@ -21,13 +22,13 @@ test.describe("Book a Demo", () => {
 });
 
 test.describe("Book a Demo - Form Validation", () => {
-  const requiredFields: { fieldName: string; locator: (page: any) => Locator }[] = [
-    { fieldName: "First Name", locator: (page) => page.firstNameInput },
-    { fieldName: "Last Name", locator: (page) => page.lastNameInput },
-    { fieldName: "Professional Email", locator: (page) => page.professionalEmailInput },
-    { fieldName: "Phone Number", locator: (page) => page.phoneNumberInput },
-    { fieldName: "Job Title", locator: (page) => page.jobTitleInput },
-    { fieldName: "Country/Region", locator: (page) => page.countryRegionDropdown },
+  const requiredFields: { fieldName: string; locator: (bookDemoPage: BookDemoPage) => Locator }[] = [
+    { fieldName: "First Name", locator: (bookDemoPage) => bookDemoPage.firstNameInput },
+    { fieldName: "Last Name", locator: (bookDemoPage) => bookDemoPage.lastNameInput },
+    { fieldName: "Professional Email", locator: (bookDemoPage) => bookDemoPage.professionalEmailInput },
+    { fieldName: "Phone Number", locator: (bookDemoPage) => bookDemoPage.phoneNumberInput },
+    { fieldName: "Job Title", locator: (bookDemoPage) => bookDemoPage.jobTitleInput },
+    { fieldName: "Country/Region", locator: (bookDemoPage) => bookDemoPage.countryRegionDropdown },
   ];
 
   requiredFields.forEach(({ fieldName, locator }) => {
@@ -158,7 +159,7 @@ test.describe("Book a Demo - Form Validation", () => {
       await expect(validationMessage).toContainText(message);
     });
   });
-  //TODO: Clarify with the team if this is a valid test case
+  //Clarify with the team if this is a valid test case
   test.fixme("Verify number with less than 6 digits is not accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("12345");
     await bookDemoPage.messageTextarea.click();
