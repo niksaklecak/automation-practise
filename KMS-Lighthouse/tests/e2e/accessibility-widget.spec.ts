@@ -18,10 +18,6 @@ test.describe("Accessibility Widget", () => {
     await accessibilityWidget.closeAccessibilityToolbarButton.click();
     await expect(accessibilityWidget.accessibilityToolbarLabel).toBeHidden();
   });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
 });
 
 test.describe("Accessibility Widget - toggles should work correctly", () => {
@@ -176,9 +172,5 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
 
     await expect(newLabelBackgroundColor).toBe("rgba(0, 0, 0, 0)");
     await expect(newLinkBackgroundColor).toContain("rgba(255, 233, 1");
-  });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
   });
 });

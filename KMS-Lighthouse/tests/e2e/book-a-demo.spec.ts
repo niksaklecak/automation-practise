@@ -17,12 +17,6 @@ test.describe("Book a Demo", () => {
     await expect(bookDemoPage.messageTextarea).toBeVisible();
     await expect(bookDemoPage.bookADemoButton).toBeVisible();
   });
-
-  test("Verify form validation works correctly", async () => {});
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
 });
 
 test.describe("Book a Demo - front end form validation - test required fields", () => {
@@ -66,10 +60,6 @@ test.describe("Book a Demo - front end form validation - test required fields", 
     await bookDemoPage.messageTextarea.click();
     const countryRegionDropdownValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
     await expect(countryRegionDropdownValidationMessage).toContainText("Please complete this required field.");
-  });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
   });
 });
 
@@ -135,10 +125,6 @@ test.describe("Book a Demo - front end form validation - email field validation 
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
     await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
   });
 });
 
@@ -231,10 +217,6 @@ test.describe("Book a Demo - front end form validation - email field validation 
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
     await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
-  });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
   });
 });
 

@@ -38,8 +38,4 @@ test.describe("Test top level navigation - our solutions submenu", () => {
 
     await expect(mainPage.ourSolutionsSubmenuPanel).toBeVisible();
   });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
 });

@@ -79,8 +79,4 @@ test.describe("Test terms and privacy policy", () => {
           - listitem: Follow the instructions at the bottom of each email and we will promptly remove you from subscription correspondence.
         `);
   });
-
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
 });
