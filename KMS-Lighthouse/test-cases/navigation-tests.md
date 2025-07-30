@@ -1,43 +1,44 @@
-### Test Case: Hover on “Our Solution” link opens submenu
-
-- **Description**: Verifies that hovering over “Our Solution” in the main nav opens a submenu.
-- **Preconditions**: User is on the homepage
-- **Steps**:
-  1.  Hover over “Our Solution” link in the navigation
-- **Expected Result**: Verify that panel with items “Call Center”, “Self Service”, “Onboarding & Training”, “Field Service” appears
-- **Status**: Not executed
+# Test Cases for Navigation
 
 ---
 
-### Test Case: Click on “Our Solution” link opens submenu
+### Test Case: Hover on "Our Solution" link opens submenu
 
-- **Description**: Verifies that clicking on “Our Solution” in the main nav opens a submenu.
-- **Preconditions**: User is on the homepage
+- **Priority**: High
+- **Description**: Verifies that hovering over "Our Solution" in the main navigation opens a submenu with the correct content and animation.
+- **Preconditions**: User is on the homepage.
 - **Steps**:
-  1.  Click on “Our Solution” link in the navigation
-- **Expected Result**: Verify that panel with items “Call Center”, “Self Service”, “Onboarding & Training”, “Field Service” appears
-- **Status**: Not executed
+  1.  Hover over the "Our Solution" link in the navigation.
+- **Expected Result**:
+  - The submenu panel becomes visible.
+  - The panel's `transition-duration` is `0.3s`, confirming the slide-down animation is active.
+  - The submenu contains the correct links: "Call Center", "Self Service", "Onboarding & Training", and "Field Service".
+- **Status**: Automated
 
 ---
 
-### Test Case: Click outside “Our Solution” submenu closes it
+### Test Case: Click outside "Our Solution" submenu closes it
 
-- **Description**: Verifies that clicking outside “Our Solution” closes submenu.
-- **Preconditions**: User is on the homepage
+- **Priority**: High
+- **Description**: Verifies that the "Our Solution" submenu closes when the user clicks on another part of the page.
+- **Preconditions**: User is on the homepage.
 - **Steps**:
-  1.  Click on “Our Solution” link in the navigation
-  2.  Click anywhere outside of the dropdown - on other link, not on a link
-- **Expected Result**: Verify that Submenu closes
-- **Status**: Not executed
+  1.  Hover over the "Our Solution" link to open the submenu.
+  2.  Verify the submenu is visible.
+  3.  Click on the main heading of the page.
+- **Expected Result**: The submenu panel becomes hidden.
+- **Status**: Automated
 
 ---
 
-### Test Case: Verify submenu stays open when scrolling down
+### Test Case: Submenu stays open when scrolling down
 
-- **Description**: Verifies that clicking outside “Our Solution” closes submenu.
-- **Preconditions**: User is on the homepage
+- **Priority**: High
+- **Description**: Verifies that the "Our Solution" submenu remains open even when the user scrolls the page.
+- **Preconditions**: User is on the homepage.
 - **Steps**:
-  1.  Click on “Our Solution” link in the navigation
-  2.  Click anywhere outside of the dropdown - on other link, not on a link
-- **Expected Result**: Verify that Submenu closes
-- **Status**: Not executed
+  1.  Hover over the "Our Solution" link to open the submenu.
+  2.  Verify the submenu is visible.
+  3.  Scroll the page down.
+- **Expected Result**: The submenu panel remains visible after scrolling.
+- **Status**: Automated

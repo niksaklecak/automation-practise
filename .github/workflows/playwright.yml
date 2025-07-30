@@ -2,24 +2,37 @@ name: Playwright Tests
 on:
   pull_request:
     branches: [main]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
-    timeout-minutes: 10
+    environment: kmslh
+    env:
+      NODE_ENV: ci
+      BASE_URL: ${{ vars.BASE_URL }}
+
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Print BASE_URL
+        run: echo "The BASE_URL is ${{ vars.BASE_URL }}"
       - uses: actions/setup-node@v4
         with:
           node-version: 18
       - name: Install dependencies
         run: npm install
+        working-directory: ./KMS-Lighthouse
       - name: Install Playwright Browsers
-        run: npx playwright install
-      - name: Run Playwright tests
+        run: npx playwright install --with-deps
+        working-directory: ./KMS-Lighthouse
+      - name: Run Playwright tests on Chromium
         run: npx playwright test
+        working-directory: ./KMS-Lighthouse
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: playwright-report/
-          retention-days: 2
+          path: KMS-Lighthouse/playwright-report/
+          retention-days: 30
