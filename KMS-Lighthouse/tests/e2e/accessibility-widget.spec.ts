@@ -21,7 +21,7 @@ test.describe("Accessibility Widget", () => {
   });
 });
 
-test.describe("Accessibility Widget - toggles should work correctly", () => {
+test.describe("Accessibility Widget - toggles should work correctly @e2e", () => {
   test("keyboard navigation toggle should work correctly", async ({ accessibilityWidget }) => {
     await accessibilityWidget.keyboardNavigationToggle.click();
     await expect(accessibilityWidget.keyboardNavigationToggle).toBeFocused();
@@ -29,7 +29,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     await expect(accessibilityWidget.disableAnimationsToggle).toBeFocused();
   });
 
-  test("disable animations toggle should work correctly", async ({ mainPage, accessibilityWidget }) => {
+  test("Verify disable animations toggle should work correctly", async ({ mainPage, accessibilityWidget }) => {
     expect(accessibilityWidget.disableAnimationsToggle).not.toBeChecked();
     await accessibilityWidget.closeAccessibilityToolbarButton.click();
 
@@ -51,7 +51,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(finalTransformDuration).toBe("0s");
   });
 
-  test("contrast toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
+  test("Verify contrast toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
     expect(accessibilityWidget.contrastToggle).not.toBeChecked();
     await accessibilityWidget.closeAccessibilityToolbarButton.click();
 
@@ -76,7 +76,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(newBackgroundColor).toBe("rgb(0, 0, 0)");
   });
 
-  test("increase text size toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
+  test("Verify increase text size toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
     expect(accessibilityWidget.increaseTextToggle).not.toBeChecked();
 
     const initialFontSize = await accessibilityWidget.accessibilityToolbarLabel.evaluate((el) => {
@@ -95,7 +95,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(newFontSize).toBe("38.4px");
   });
 
-  test("decrease text size toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
+  test("Verify decrease text size toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
     expect(accessibilityWidget.decreaseTextToggle).not.toBeChecked();
 
     const initialFontSize = await accessibilityWidget.accessibilityToolbarLabel.evaluate((el) => {
@@ -114,7 +114,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(newFontSize).toBe("19.2px");
   });
 
-  test("readable font toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
+  test("Verify readable font toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
     expect(accessibilityWidget.readableFontToggle).not.toBeChecked();
 
     const initialFontFamily = await accessibilityWidget.accessibilityToolbarLabel.evaluate((el) => {
@@ -133,7 +133,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(newFontFamily).toBe("Arial, sans-serif");
   });
 
-  test("mark titles toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
+  test("Verify mark titles toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
     expect(accessibilityWidget.markTitlesToggle).not.toBeChecked();
 
     const initialBackgroundColor = await accessibilityWidget.accessibilityToolbarLabel.evaluate((el) => {
@@ -152,7 +152,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(newBackgroundColor).toBe("rgb(255, 255, 0)");
   });
 
-  test("highlight links and buttons toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
+  test("Verify highlight links and buttons toggle should work correctly", async ({ accessibilityWidget, mainPage }) => {
     expect(accessibilityWidget.highlightLinksAndButtonsToggle).not.toBeChecked();
 
     const initialLabelBackgroundColor = await accessibilityWidget.accessibilityToolbarLabel.evaluate((el) => {
@@ -180,7 +180,7 @@ test.describe("Accessibility Widget - toggles should work correctly", () => {
     expect(newLinkBackgroundColor).toBe("rgba(255, 233, 1, 0.07)");
   });
 
-  test("close toolbar button should work correctly", async ({ accessibilityWidget }) => {
+  test("Verify close toolbar button should work correctly", async ({ accessibilityWidget }) => {
     await accessibilityWidget.closeAccessibilityToolbarButton.click();
     await expect(accessibilityWidget.accessibilityToolbarLabel).toBeHidden();
   });
