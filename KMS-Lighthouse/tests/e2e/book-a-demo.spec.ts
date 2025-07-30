@@ -1,4 +1,5 @@
 import { test, expect } from "../fixtures/base";
+import { Locator } from "@playwright/test";
 
 test.describe("Book a Demo", () => {
   test("Verify navigation link works", async ({ mainPage, bookDemoPage }) => {
@@ -19,333 +20,147 @@ test.describe("Book a Demo", () => {
   });
 });
 
-test.describe("Book a Demo - front end form validation - test required fields", () => {
-  test("Verify first name field validation works correctly", async ({ bookDemoPage }) => {
-    await bookDemoPage.firstNameInput.click();
-    await bookDemoPage.messageTextarea.click();
-    const firstNameValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(firstNameValidationMessage).toContainText("Please complete this required field.");
+test.describe("Book a Demo - Form Validation", () => {
+  const requiredFields: { fieldName: string; locator: (page: any) => Locator }[] = [
+    { fieldName: "First Name", locator: (page) => page.firstNameInput },
+    { fieldName: "Last Name", locator: (page) => page.lastNameInput },
+    { fieldName: "Professional Email", locator: (page) => page.professionalEmailInput },
+    { fieldName: "Phone Number", locator: (page) => page.phoneNumberInput },
+    { fieldName: "Job Title", locator: (page) => page.jobTitleInput },
+    { fieldName: "Country/Region", locator: (page) => page.countryRegionDropdown },
+  ];
+
+  requiredFields.forEach(({ fieldName, locator }) => {
+    test(`Verify ${fieldName} field validation works correctly`, async ({ bookDemoPage }) => {
+      await locator(bookDemoPage).click();
+      await bookDemoPage.messageTextarea.click();
+      const validationMessage = bookDemoPage.page.locator('[role="alert"]').first();
+      await expect(validationMessage).toContainText("Please complete this required field.");
+    });
   });
 
-  test("Verify last name field validation works correctly", async ({ bookDemoPage }) => {
-    await bookDemoPage.lastNameInput.click();
-    await bookDemoPage.messageTextarea.click();
-    const lastNameValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(lastNameValidationMessage).toContainText("Please complete this required field.");
+  const positiveEmails = [
+    "test@gmail.com",
+    "test@asd.com",
+    "test@sub.domain.com",
+    "test+alias@domain.com",
+    "test@domain-name.com",
+    "test@domain.co.uk",
+    "test@domain.info",
+    "test@domain.engineering",
+    "a.very.long.email.address.that.is.technically.valid@long-domain-name.com",
+  ];
+
+  positiveEmails.forEach((email) => {
+    test(`Verify email "${email}" is accepted`, async ({ bookDemoPage }) => {
+      await bookDemoPage.professionalEmailInput.fill(email);
+      await bookDemoPage.messageTextarea.click();
+      const validationMessage = bookDemoPage.page.locator('[role="alert"]').first();
+      await expect(validationMessage).not.toBeVisible({ timeout: 1000 });
+    });
   });
 
-  test("Verify professional email field validation works correctly", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.click();
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please complete this required field.");
+  const negativeEmails = [
+    {
+      email: "test@test.com",
+      message: "Please enter a different email address. This form does not accept addresses from test.com.",
+    },
+    { email: "testexample.com", message: "Email must be formatted correctly." },
+    { email: "test at @asd.com", message: "Email must be formatted correctly." },
+    { email: "test@", message: "Email must be formatted correctly." },
+    { email: "test@asd", message: "Email must be formatted correctly." },
+    { email: "@asd.com", message: "Email must be formatted correctly." },
+    { email: "test!#$%^&*()@asd.com", message: "Please enter a valid email address." },
+    { email: "test@@email.com", message: "Email must be formatted correctly." },
+    { email: "test@email..com", message: "Please enter a valid email address." },
+    {
+      email: "test..123@email.com",
+      message: "Please enter a different email address. This form does not accept addresses from email.com.",
+    },
+    {
+      email: ".test@email.com",
+      message: "Please enter a different email address. This form does not accept addresses from email.com.",
+    },
+    { email: "test@.asd.com", message: "Please enter a valid email address." },
+  ];
+
+  negativeEmails.forEach(({ email, message }) => {
+    test(`Verify email "${email}" is rejected`, async ({ bookDemoPage }) => {
+      await bookDemoPage.professionalEmailInput.fill(email);
+      await bookDemoPage.messageTextarea.click();
+      const validationMessage = bookDemoPage.page.locator('[role="alert"]').first();
+      await expect(validationMessage).toContainText(message);
+    });
   });
 
-  test("Verify phone number field validation works correctly", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.click();
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please complete this required field.");
+  const positivePhoneNumbers = [
+    "+1234567890",
+    "123-456-7890",
+    "123 456 7890",
+    "(123) 456-7890",
+    "+1 (123) 456-7890",
+    "+1(123)456-7890",
+  ];
+
+  positivePhoneNumbers.forEach((number) => {
+    test(`Verify phone number "${number}" is accepted`, async ({ bookDemoPage }) => {
+      await bookDemoPage.phoneNumberInput.fill(number);
+      await bookDemoPage.messageTextarea.click();
+      const validationMessage = bookDemoPage.page.locator('[role="alert"]').first();
+      await expect(validationMessage).not.toBeVisible({ timeout: 1000 });
+    });
   });
 
-  test("Verify job title field validation works correctly", async ({ bookDemoPage }) => {
-    await bookDemoPage.jobTitleInput.click();
-    await bookDemoPage.messageTextarea.click();
-    const jobTitleValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(jobTitleValidationMessage).toContainText("Please complete this required field.");
-  });
+  const negativePhoneNumbers = [
+    {
+      number: "abc123def",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "123-456-7890!",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "123@456$7890",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "123 @456 #7890",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "123456789012345678901234567890",
+      message: "The number you entered is not in range.",
+    },
+    {
+      number: "123+456-7890",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "++11234567890",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "(123-456-7890",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+    {
+      number: "123)-456-7890",
+      message: "A valid phone number may only contain numbers, +()-. or x",
+    },
+  ];
 
-  test("Verify country region dropdown validation works correctly", async ({ bookDemoPage }) => {
-    await bookDemoPage.countryRegionDropdown.click();
-    await bookDemoPage.messageTextarea.click();
-    const countryRegionDropdownValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(countryRegionDropdownValidationMessage).toContainText("Please complete this required field.");
+  negativePhoneNumbers.forEach(({ number, message }) => {
+    test(`Verify phone number "${number}" is rejected`, async ({ bookDemoPage }) => {
+      await bookDemoPage.phoneNumberInput.fill(number);
+      await bookDemoPage.messageTextarea.click();
+      const validationMessage = bookDemoPage.page.locator('[role="alert"]').first();
+      await expect(validationMessage).toContainText(message);
+    });
   });
-});
-
-test.describe("Book a Demo - front end form validation - email field validation - positive tests", () => {
-  test("Verify gmail email address is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@gmail.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-  test("Verify proper email format is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@asd.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-  test("Verify proper subdomain email format is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@sub.domain.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify proper email format with alias is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test+alias@domain.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify proper email format with domain name is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@domain-name.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify proper email format with country code is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@domain.co.uk");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify proper email format with info domain is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@domain.info");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify proper email format with engineering domain is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@domain.engineering");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify proper email format with long domain name is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill(
-      "a.very.long.email.address.that.is.technically.valid@long-domain-name.com"
-    );
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-});
-
-test.describe("Book a Demo - front end form validation - email field validation - negative tests", () => {
-  test("Verify test domain is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@test.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText(
-      "Please enter a different email address. This form does not accept addresses from test.com."
-    );
-  });
-
-  test("Verify Missing '@' symbol is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("testexample.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
-  });
-
-  test("Verify Missing spaces in an email address is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test at @asd.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
-  });
-
-  test("Verify Missing Domain Name is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
-  });
-
-  test("Verify Missing Top-Level Domain is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@asd");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
-  });
-
-  test("Verify when email starts with @ is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("@asd.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
-  });
-
-  test("Verify special characters are not allowed in the email address", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test!#$%^&*()@asd.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
-  });
-
-  test("Verify multiple @ symbols are not allowed in the email address", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@@email.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
-  });
-
-  test("Verify multiple dots are not allowed in the domain address", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@email..com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
-  });
-
-  test("Verify multiple dots are not allowed in the email address", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test..123@email.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText(
-      "Please enter a different email address. This form does not accept addresses from email.com."
-    );
-  });
-
-  test("Verify email address with a dot in the domain name is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill(".test@email.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText(
-      "Please enter a different email address. This form does not accept addresses from email.com."
-    );
-  });
-
-  test("Verify email address with a dot in the email address is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@.asd.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
-  });
-});
-
-test.describe("Book a Demo - front end form validation - phone number field validation - positive tests", () => {
-  test("Verify phone number with country code is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("+1234567890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify number with dashes is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123-456-7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify number with spaces is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123 456 7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify number with parentheses is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("(123) 456-7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify number with +  () and dashes and spaces is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("+1 (123) 456-7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-
-  test("Verify number with +  () and dashes without spaces is accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("+1(123)456-7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).not.toBeVisible({ timeout: 1000 });
-  });
-});
-
-test.describe("Book a Demo - front end form validation - phone number field validation - negative tests", () => {
-  test("Verify alfabetic characters are not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("abc123def");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify special characters are not accepted one dash", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123-456-7890!");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify special characters are not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123@456$7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify special characters are not accepted spaces in the phone number", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123 @456 #7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
+  //TODO: Clarify with the team if this is a valid test case
   test.fixme("Verify number with less than 6 digits is not accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("12345");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify number with more than 15 digits is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123456789012345678901234567890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("The number you entered is not in range.");
-  });
-
-  test("Verify number with incorrect + and - is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123+456-7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify number with multiple + and is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("++11234567890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify number with incorrect ( and - is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("(123-456-7890");
-    await bookDemoPage.messageTextarea.click();
-    const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText(
-      "A valid phone number may only contain numbers, +()-. or x"
-    );
-  });
-
-  test("Verify number with incorrect ) and - is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123)-456-7890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
     await expect(phoneNumberValidationMessage).toContainText(
