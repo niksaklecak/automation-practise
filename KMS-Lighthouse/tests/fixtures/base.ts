@@ -2,11 +2,13 @@ import { test as base, expect } from "@playwright/test";
 import { MainPage } from "../../pages/main-page";
 import { BookDemoPage } from "../../pages/book-demo-page";
 import { AccessibilityWidget } from "../../pages/accessibility-widget";
+import { TermsAndPrivacyPolicyPage } from "../../pages/terms-and-conditions-page";
 
 type MyFixtures = {
   mainPage: MainPage;
   bookDemoPage: BookDemoPage;
   accessibilityWidget: AccessibilityWidget;
+  termsAndPrivacyPolicyPage: TermsAndPrivacyPolicyPage;
 };
 
 export const test = base.extend<MyFixtures>({
@@ -29,6 +31,13 @@ export const test = base.extend<MyFixtures>({
     await mainPage.accessibilityWidgetLink.click();
     await expect(accessibilityWidget.accessibilityToolbarLabel).toBeVisible();
     await use(accessibilityWidget);
+  },
+
+  termsAndPrivacyPolicyPage: async ({ page }, use) => {
+    const termsAndPrivacyPolicyPage = new TermsAndPrivacyPolicyPage(page);
+    await termsAndPrivacyPolicyPage.open();
+    await page.waitForURL("**/terms-and-privacy-policy/");
+    await use(termsAndPrivacyPolicyPage);
   },
 });
 
