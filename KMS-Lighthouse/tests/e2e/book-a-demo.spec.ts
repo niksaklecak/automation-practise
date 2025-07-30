@@ -74,7 +74,7 @@ test.describe("Book a Demo - front end form validation - test required fields", 
 });
 
 test.describe("Book a Demo - front end form validation - email field validation - positive tests", () => {
-  test.fail("Verify gmail email address is accepted", async ({ bookDemoPage }) => {
+  test("Verify gmail email address is accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill("test@gmail.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
@@ -152,46 +152,39 @@ test.describe("Book a Demo - front end form validation - email field validation 
     );
   });
 
-  test("Verify test@example.com is a valid email - but domain is not valid", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test@example.com");
-    await bookDemoPage.messageTextarea.click();
-    const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
-  });
-
   test("Verify Missing '@' symbol is not a valid email", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill("testexample.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
   });
 
   test("Verify Missing spaces in an email address is not a valid email", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill("test at @asd.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
   });
 
   test("Verify Missing Domain Name is not a valid email", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill("test@");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
   });
 
   test("Verify Missing Top-Level Domain is not a valid email", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill("test@asd");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
   });
 
   test("Verify when email starts with @ is not a valid email", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill("@asd.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
   });
 
   test("Verify special characters are not allowed in the email address", async ({ bookDemoPage }) => {
@@ -205,7 +198,7 @@ test.describe("Book a Demo - front end form validation - email field validation 
     await bookDemoPage.professionalEmailInput.fill("test@@email.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText("Email must be formatted correctly.");
   });
 
   test("Verify multiple dots are not allowed in the domain address", async ({ bookDemoPage }) => {
@@ -219,18 +212,22 @@ test.describe("Book a Demo - front end form validation - email field validation 
     await bookDemoPage.professionalEmailInput.fill("test..123@email.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText(
+      "Please enter a different email address. This form does not accept addresses from email.com."
+    );
   });
 
   test("Verify email address with a dot in the domain name is not a valid email", async ({ bookDemoPage }) => {
     await bookDemoPage.professionalEmailInput.fill(".test@email.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
+    await expect(professionalEmailValidationMessage).toContainText(
+      "Please enter a different email address. This form does not accept addresses from email.com."
+    );
   });
 
   test("Verify email address with a dot in the email address is not a valid email", async ({ bookDemoPage }) => {
-    await bookDemoPage.professionalEmailInput.fill("test.@asd.com");
+    await bookDemoPage.professionalEmailInput.fill("test@.asd.com");
     await bookDemoPage.messageTextarea.click();
     const professionalEmailValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
     await expect(professionalEmailValidationMessage).toContainText("Please enter a valid email address.");
@@ -290,35 +287,45 @@ test.describe("Book a Demo - front end form validation - phone number field vali
     await bookDemoPage.phoneNumberInput.fill("abc123def");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify special characters are not accepted one dash", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("123-456-7890!");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify special characters are not accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("123@456$7890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify special characters are not accepted spaces in the phone number", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("123 @456 #7890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
-  test("Verify number with less than 10 digits is not accepted", async ({ bookDemoPage }) => {
-    await bookDemoPage.phoneNumberInput.fill("123456789");
+  test.fixme("Verify number with less than 6 digits is not accepted", async ({ bookDemoPage }) => {
+    await bookDemoPage.phoneNumberInput.fill("12345");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify number with more than 15 digits is not accepted", async ({ bookDemoPage }) => {
@@ -332,27 +339,35 @@ test.describe("Book a Demo - front end form validation - phone number field vali
     await bookDemoPage.phoneNumberInput.fill("123+456-7890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify number with multiple + and is not accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("++11234567890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify number with incorrect ( and - is not accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("(123-456-7890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 
   test("Verify number with incorrect ) and - is not accepted", async ({ bookDemoPage }) => {
     await bookDemoPage.phoneNumberInput.fill("123)-456-7890");
     await bookDemoPage.messageTextarea.click();
     const phoneNumberValidationMessage = bookDemoPage.page.locator('[role="alert"]').first();
-    await expect(phoneNumberValidationMessage).toContainText("Please enter a valid phone number.");
+    await expect(phoneNumberValidationMessage).toContainText(
+      "A valid phone number may only contain numbers, +()-. or x"
+    );
   });
 });

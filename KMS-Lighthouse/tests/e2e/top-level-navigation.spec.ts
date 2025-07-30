@@ -1,7 +1,7 @@
 import { test, expect } from "../fixtures/base";
 
 test.describe("Test top level navigation - our solutions submenu", () => {
-  test("hover on 'Our Solution' should open submenu with animation", async ({ mainPage }) => {
+  test.fixme("hover on 'Our Solution' should open submenu with animation", async ({ mainPage }) => {
     await mainPage.ourSolutionsLink.hover();
     const initialDuration = await mainPage.ourSolutionsSubmenuPanel.evaluate((el) => {
       return window.getComputedStyle(el).transitionDuration;

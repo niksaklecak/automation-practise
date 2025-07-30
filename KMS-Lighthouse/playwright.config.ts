@@ -33,10 +33,6 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "e2e",
-      grep: /@e2e/,
-    },
-    {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
