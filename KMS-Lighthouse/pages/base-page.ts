@@ -18,6 +18,6 @@ export class BasePage {
     this.caseStudiesLink = page.getByRole("banner").getByRole("link", { name: "Case Studies" });
     this.aboutLink = page.getByRole("banner").getByRole("link", { name: "About" });
     this.bookADemoLink = page.getByRole("banner").getByRole("link", { name: "Book a Demo" });
-    this.accessibilityWidgetLink = page.getByRole("banner").getByRole("link", { name: "Accessibility Widget" });
+    this.accessibilityWidgetLink = page.locator("#acwp-toolbar-btn");
   }
 }

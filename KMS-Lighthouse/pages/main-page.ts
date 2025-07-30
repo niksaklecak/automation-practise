@@ -2,13 +2,14 @@ import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./base-page";
 
 export class MainPage extends BasePage {
-  readonly bookADemoLink: Locator;
-  readonly accessibilityWidgetLink: Locator;
+  readonly ourSolutionsSubmenuPanel: Locator;
+  readonly mainHeading: Locator;
+  readonly iNeedKnowledgeManagementForMyTeamLink: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.bookADemoLink = this.page.getByRole("banner").getByRole("link", { name: "Book a Demo" });
-    this.accessibilityWidgetLink = this.page.getByRole("button", { name: "Toggle Accessibility Toolbar" });
+    this.ourSolutionsSubmenuPanel = page.locator('[aria-labelledby="dropdown_menu-0"]');
+    this.iNeedKnowledgeManagementForMyTeamLink = page.locator('[data-id="0600780"]');
   }
 
   async open() {

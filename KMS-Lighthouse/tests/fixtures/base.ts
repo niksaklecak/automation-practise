@@ -18,9 +18,10 @@ export const test = base.extend<MyFixtures>({
   },
 
   bookDemoPage: async ({ mainPage, page }, use) => {
+    const bookDemoPage = new BookDemoPage(page);
     await mainPage.bookADemoLink.click();
     await page.waitForURL("**/book-a-demo/", { timeout: 10000 });
-    await use(new BookDemoPage(page));
+    await use(bookDemoPage);
   },
 
   accessibilityWidget: async ({ mainPage, page }, use) => {

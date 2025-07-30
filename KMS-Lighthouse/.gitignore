@@ -4,3 +4,4 @@ node_modules
 .vscode
 
 playwright-report
+test-results
